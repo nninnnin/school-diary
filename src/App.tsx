@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { InputValues } from "./models";
 
 function App() {
-  const [inputValues, setInputValues] = useState({
-    homeworkType: "",
+  const [inputValues, setInputValues] = useState<InputValues>({
+    homeworkType: null,
     homeworkMemo: "",
-    moodType: "",
+    moodType: null,
     moodMemo: "",
   });
+
+  const handleSubmitButtonClick = () => {
+    console.log("gg");
+  };
 
   return (
     <div className="bg-yellow-100 text-white flex w-full h-[100vh] p-5">
@@ -47,6 +52,7 @@ function App() {
                 오늘의 기분은?
               </option>
               <option value="">😄</option>
+              <option value="">😍</option>
               <option value="">🥲</option>
               <option value="">🥹</option>
             </select>
@@ -62,9 +68,7 @@ function App() {
 
         <button
           className="bg-black w-full p-3 rounded-2xl mt-auto"
-          onClick={(e) => {
-            e.preventDefault();
-          }}
+          onClick={handleSubmitButtonClick}
         >
           알림장 작성 완료!
         </button>
