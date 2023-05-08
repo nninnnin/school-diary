@@ -14,10 +14,10 @@ export default function App() {
     );
 }
 
-function LeftDivCom() {
+function LeftDivCom(props) {
     const [homeworks, setHomeworks] = useState([]);
     const [noticeMemos,setNoticeMemos] = useState([]);
-
+    
     return (
         <LeftDiv>
             <HomeworkDiv >
@@ -27,14 +27,14 @@ function LeftDivCom() {
             </HomeworkDiv>
             <TodayMeDiv>
                 <h3>오늘의 나는?</h3>
-                <TodayMe noticeMemos={noticeMemos} setNoticeMemos={setNoticeMemos} homeworks={homeworks}/>
+                <TodayMe homeworks={homeworks} noticeMemos={noticeMemos} setNoticeMemos={setNoticeMemos}/>
             </TodayMeDiv>
         </LeftDiv>
     );
 }
 
 /** Homework Div */
-function Subject( {homeworks, setHomeworks}) {
+function Subject({ homeworks, setHomeworks }) {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [writtenSubjectMemo, setWrittenSubjectMemo] = useState("");
 
@@ -107,7 +107,7 @@ function Subject( {homeworks, setHomeworks}) {
 
 
 /** TodayMe Div */
-function TodayMe(setHomeworks,homeworks,noticeMemos,setNoticeMemos) {
+function TodayMe({homeworks,noticeMemos,setNoticeMemos}) {
     const [selectedEmotion, setSelectedEmotion] = useState("");
     const [writtenEmotionMemo, setWrittenEmotionMemo] = useState("");
 
@@ -120,12 +120,17 @@ function TodayMe(setHomeworks,homeworks,noticeMemos,setNoticeMemos) {
     }
 
     const handleButtonClick = (event) => { //here!!
-        setNoticeMemos( (prevNoticeMemos) => [
-            ...prevNoticeMemos,
-            [homeworks,`${selectedEmotion} ${writtenEmotionMemo}`]
-        ]); 
+        setNoticeMemos( (prevNoticeMemos) => {
+            console.log(homeworks);
+
+            return [
+                ...prevNoticeMemos,
+                [homeworks,`${selectedEmotion} ${writtenEmotionMemo}`]
+            ];
+        }); 
     }
 
+    console.log(noticeMemos);
 
     return(
         <>
@@ -178,8 +183,6 @@ const TodayMeDiv = styled.div`
     width:80%;
     margin-top: 3vw;
 `
-
-
 
 const DropdownSelect = styled.select`
     width: 100%;
