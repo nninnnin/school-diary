@@ -5,19 +5,63 @@ import './App.css';
 
 export default function App() {
     return (
-        <ParentDiv>
-            <LeftDivCom />
-            <RightDiv>
-                <NoticeItemButton></NoticeItemButton>
-            </RightDiv>
-        </ParentDiv>
+        <ParentDivCom />
     );
 }
 
-function LeftDivCom(props) {
+
+
+function ParentDivCom() {
     const [homeworks, setHomeworks] = useState([]);
     const [noticeMemos,setNoticeMemos] = useState([]);
-    
+
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const handleNoticeItemButtonClick= (event) => {
+        setModalOpen(true);
+    }
+
+    let now = new Date();
+    let date = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일`
+
+
+    return(
+        <>
+        <ParentDiv>
+            <LeftDivCom homeworks={homeworks} setHomeworks={setHomeworks} noticeMemos={noticeMemos} setNoticeMemos={setNoticeMemos}/>
+            <RightDiv>
+                <NoticeItemButton onClick={handleNoticeItemButtonClick}>
+                    <NoticeItemButton_Date>{date}</NoticeItemButton_Date>
+                    <NoticeItemButton_Emotion>noticeMemos[0][1]</NoticeItemButton_Emotion>
+                    <NoticeItemButton_TeacherCheck>선생님 확인: ❤️</NoticeItemButton_TeacherCheck>
+                </NoticeItemButton>
+            </RightDiv>
+        </ParentDiv>
+        <Modal modalOpen={modalOpen} setModalOpen={setModalOpen}/>
+        </>
+    )
+}
+
+function Modal({modalOpen,setModalOpen}) {
+    const handleModalCloseButton = () => {
+        setModalOpen(false);
+    }
+
+    if (!modalOpen) return null;
+
+    return (
+        <ModalOverlay>
+            <ModalContainer>
+                <ModalHeader>안녕하세요</ModalHeader>
+                <ModalContent>모달 컨텐츠</ModalContent>
+                <ModalCloseButton onClick={handleModalCloseButton}>끄기</ModalCloseButton>
+            </ModalContainer>
+        </ModalOverlay>
+    )
+
+}
+
+function LeftDivCom({homeworks,setHomeworks,noticeMemos,setNoticeMemos}) {
     return (
         <LeftDiv>
             <HomeworkDiv >
@@ -61,7 +105,6 @@ function Subject({ homeworks, setHomeworks }) {
                     ]); 
                 setSelectedSubject('');
                 setWrittenSubjectMemo('');
-                console.log(homeworks);
                 if (homeworks.length===4) { //QQQ.질문해야함. 왜 하나씩 밀리는지
                     setSelectedSubject('');
                     setWrittenSubjectMemo('최대 5개까지만 입력할 수 있습니다.');
@@ -119,9 +162,8 @@ function TodayMe({homeworks,noticeMemos,setNoticeMemos}) {
         setWrittenEmotionMemo(event.target.value);
     }
 
-    const handleButtonClick = (event) => { //here!!
+    const handleButtonClick = (event) => {
         setNoticeMemos( (prevNoticeMemos) => {
-            console.log(homeworks);
 
             return [
                 ...prevNoticeMemos,
@@ -130,7 +172,7 @@ function TodayMe({homeworks,noticeMemos,setNoticeMemos}) {
         }); 
     }
 
-    console.log(noticeMemos);
+    // console.log(noticeMemos[0][1]);
 
     return(
         <>
@@ -243,14 +285,74 @@ const RightDiv = styled.div`
 
 const NoticeItemButton = styled.button`
     width:80%;
-    height: 4vw;
+    height: 6vh;
     margin-top: 3vw;
     background-color: white;
     color: black;
     text-align: center;
-    font-size: 1rem;
+    font-size: 1.2rem;
     padding: 12px;
     box-sizing: border-box;
     border-radius: 8px;
     border: 0px;
+    display: flex;
+`
+
+const NoticeItemButton_Date = styled.div`
+    width: 30%;
+`
+const NoticeItemButton_Emotion = styled.div`
+    width: 50%;
+    margin-left: 2%;
+`
+
+const NoticeItemButton_TeacherCheck = styled.div`
+    width: 30%;
+    margin-left: 5%;
+`
+
+const ModalOverlay = styled.div `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); //뒤에 배경 불투명하게 만들어줌
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+const ModalContainer = styled.div` //모달창
+    width: 30%;
+    height: 50%;
+    background-color: white;
+    border-radius: 16px;
+    color: black;
+    text-align: center;
+    
+`
+
+const ModalHeader =styled.div`
+    margin-top: 3vh;
+    font-size: 1.5rem;
+    
+`
+
+const ModalContent = styled.div`
+    margin-top: 3vh;
+    font-size: 1rem;
+    height: 30vh;
+    border: 1px solid;
+
+`
+
+const ModalCloseButton = styled.button`
+    margin-top: 2vh;
+    font-size: 1.5rem;
+    background-color: black;
+    color: white;
+    border-radius: 16px;
+    text-align: center;
+    width: 10vw;
 `
